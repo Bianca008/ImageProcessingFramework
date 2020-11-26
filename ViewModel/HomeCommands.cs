@@ -10,6 +10,9 @@ using System.Windows.Media;
 using ImageProcessingAlgorithms.Tools;
 using ImageConverter = ImageProcessingFramework.Model.ImageConverter;
 using ImageProcessingFramework.View;
+using System.IO;
+using System.Text;
+using System;
 
 namespace ImageProcessingFramework.ViewModel
 {
@@ -42,8 +45,27 @@ namespace ImageProcessingFramework.ViewModel
         private ICommand m_copyImage;
         private ICommand m_convertToGrayImage;
         private ICommand m_magnifier;
+        private ICommand m_binomial;
+        private ICommand m_sobel;
         private bool m_isColorImage;
         private bool m_isPressedConvertButton;
+        private string path = "Info.txt";
+
+        private void WriteIntoFile(string str)
+        {
+            if (File.Exists(path))
+            {
+                StreamWriter fs = File.AppendText(path);
+                fs.WriteLine(str);
+                fs.Close();
+            }
+            else using (FileStream fs = File.Create(path))
+                {
+                    StreamWriter stream = File.AppendText(path);
+                    stream.WriteLine(str);
+                    stream.Close();
+                }
+        }
 
         private void ResetUiToInitial(object parameter)
         {
@@ -75,6 +97,7 @@ namespace ImageProcessingFramework.ViewModel
             InitialImage = ImageConverter.Convert(m_colorImage);
             OnPropertyChanged("InitialImage");
             m_isColorImage = true;
+            System.IO.File.WriteAllText(path, string.Empty);
         }
 
         public void LoadGrayImage(object parameter)
@@ -92,6 +115,8 @@ namespace ImageProcessingFramework.ViewModel
             InitialImage = ImageConverter.Convert(m_grayImage);
             OnPropertyChanged("InitialImage");
             m_isColorImage = false;
+            System.IO.File.WriteAllText(path, string.Empty);
+
         }
 
         public void InvertImage(object parameter)
@@ -101,18 +126,20 @@ namespace ImageProcessingFramework.ViewModel
                 m_grayProcessedImage = Tools.Invert(m_grayImage);
                 ProcessedImage = ImageConverter.Convert(m_grayProcessedImage);
                 OnPropertyChanged("ProcessedImage");
+                WriteIntoFile("Invert grayscale image.");
+
             }
             else if (m_colorImage != null)
             {
                 m_colorProcessedImage = Tools.Invert(m_colorImage);
                 ProcessedImage = ImageConverter.Convert(m_colorProcessedImage);
                 OnPropertyChanged("ProcessedImage");
+                WriteIntoFile("Invert color image.");
             }
             else
             {
                 MessageBox.Show("Please add an image!");
             }
-
         }
 
         public void SaveImage(object parameter)
@@ -131,7 +158,7 @@ namespace ImageProcessingFramework.ViewModel
 
             var encoderParams = new EncoderParameters(1);
             encoderParams.Param[0] = new EncoderParameter(
-                Encoder.Quality,
+                System.Drawing.Imaging.Encoder.Quality,
                 (long)100
             );
 
@@ -215,12 +242,21 @@ namespace ImageProcessingFramework.ViewModel
                 m_colorProcessedImage = Tools.Copy(m_colorImage);
                 ProcessedImage = ImageConverter.Convert(m_colorProcessedImage);
                 OnPropertyChanged("ProcessedImage");
+                WriteIntoFile("Copy color image.");
                 return;
             }
-
-            System.Windows.MessageBox.Show(m_colorImage != null
-                ? "It is possible to copy only colored images."
-                : "Please add a colored image first.");
+            else
+            {
+                if (m_grayImage != null)
+                {
+                    m_grayProcessedImage = Tools.Copy(m_grayImage);
+                    ProcessedImage = ImageConverter.Convert(m_grayProcessedImage);
+                    OnPropertyChanged("ProcessedImage");
+                    WriteIntoFile("Copy grayscale image.");
+                    return;
+                }
+            }
+            System.Windows.MessageBox.Show("Please add an image.");
         }
 
         public void ConvertToGray(object parameter)
@@ -260,7 +296,7 @@ namespace ImageProcessingFramework.ViewModel
             }
         }
 
-        public void MagnifierShow (object parameter)
+        public void MagnifierShow(object parameter)
         {
             if (m_isColorImage == true)
             {
@@ -278,6 +314,46 @@ namespace ImageProcessingFramework.ViewModel
                     magnifierWindow.Show();
                 }
                 else System.Windows.MessageBox.Show("Please load an image!");
+            }
+        }
+
+        public void Binomial7x7(object parameter)
+        {
+            if (m_isColorImage == true)
+                System.Windows.MessageBox.Show("Please load an grayscale image for this filter!");
+
+            if (m_grayImage != null)
+            {
+                m_grayProcessedImage = Binomial.Binomial7(m_grayImage);
+                ProcessedImage = ImageConverter.Convert(m_grayProcessedImage);
+                OnPropertyChanged("ProcessedImage");
+                WriteIntoFile("Binomial 7x7 filter.");
+                return;
+            }
+        }
+
+        public void Sobel(object parameter)
+        {
+            if (m_isColorImage == true)
+                System.Windows.MessageBox.Show("Please load an grayscale image for this filter!");
+
+            if (m_grayImage != null)
+            {
+                DialogBox dialogBox = new DialogBox();
+                int param = -1;
+                if (dialogBox.ShowDialog() == true)
+                {
+                    param = Int32.Parse(dialogBox.ResponseText);
+                }
+                if (param >= 0)
+                {
+                    m_grayProcessedImage = Hough.Sobel(m_grayImage, param);
+                    ProcessedImage = ImageConverter.Convert(m_grayProcessedImage);
+                    OnPropertyChanged("ProcessedImage");
+                    WriteIntoFile("Sobel filter with threshold " + param.ToString() + " .");
+                }
+                else
+                    System.Windows.MessageBox.Show("Threshold must be between 0 and 255.");
             }
         }
 
@@ -389,6 +465,26 @@ namespace ImageProcessingFramework.ViewModel
                 if (m_magnifier == null)
                     m_magnifier = new RelayCommand(MagnifierShow);
                 return m_magnifier;
+            }
+        }
+
+        public ICommand Binomial7
+        {
+            get
+            {
+                if (m_binomial == null)
+                    m_binomial = new RelayCommand(Binomial7x7);
+                return m_binomial;
+            }
+        }
+
+        public ICommand SobelFilter
+        {
+            get
+            {
+                if (m_sobel == null)
+                    m_sobel = new RelayCommand(Sobel);
+                return m_sobel;
             }
         }
 

@@ -65,6 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\Binomial.cs" />
+    <Compile Include="Tools\Hough.cs" />
     <Compile Include="Tools\Tools.cs" />
   </ItemGroup>
   <ItemGroup>

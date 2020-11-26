@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.Structure;
 
 namespace ImageProcessingAlgorithms.Tools
@@ -37,6 +36,19 @@ namespace ImageProcessingAlgorithms.Tools
         public static Image<Bgr, byte> Copy(Image<Bgr, byte> image)
         {
             var result = new Image<Bgr, byte>(image.Size);
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    result.Data[y, x, 0] = (byte)(image.Data[y, x, 0]);
+                }
+            }
+            return image;
+        }
+
+        public static Image<Gray, byte> Copy(Image<Gray, byte> image)
+        {
+            var result = new Image<Gray, byte>(image.Size);
             for (int y = 0; y < image.Height; y++)
             {
                 for (int x = 0; x < image.Width; x++)

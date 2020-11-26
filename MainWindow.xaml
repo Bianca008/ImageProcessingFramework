@@ -68,6 +68,10 @@
 
             <MenuItem Header="Filters" 
                       Background="#A3F7B5">
+                <MenuItem Header="Binomial 7x7"
+                           Command="{Binding Path=Binomial7}"/>
+                <MenuItem Header="Sobel"
+                           Command="{Binding Path=SobelFilter}"/>
             </MenuItem>
             <MenuItem Header="Save as original image" 
                       Background="#A3F7B5" 

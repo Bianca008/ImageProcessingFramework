@@ -105,6 +105,9 @@
     <Compile Include="Model\DataProvider.cs" />
     <Compile Include="Model\ImageConverter.cs" />
     <Compile Include="ViewModel\MagnifierCommands.cs" />
+    <Compile Include="View\DialogBox.xaml.cs">
+      <DependentUpon>DialogBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MagnifierWindow.xaml.cs">
       <DependentUpon>MagnifierWindow.xaml</DependentUpon>
     </Compile>
@@ -126,6 +129,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\DialogBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MagnifierWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -15,16 +15,14 @@ namespace ImageProcessingFramework.View
 
         public MagnifierWindow(Image<Bgr, byte> colorImage, Image<Bgr, byte> colorProccesedImage = null)
         {
-
             InitializeComponent();
 
             var magnifierCommands = new MagnifierCommands();
-            //originalImageView.Model = magnifierCommands.PlotColorImage(colorImage);
-            //if (colorProccesedImage != null)
-            //{
-            //    processedImageView.Model = magnifierCommands.PlotColorImage(colorProccesedImage);
-            //}
-           
+            originalImageView.Model = magnifierCommands.MagnifierColorImage(colorImage);
+            if (colorProccesedImage != null)
+            {
+                processedImageView.Model = magnifierCommands.MagnifierColorImage(colorProccesedImage);
+            }
         }
 
         public MagnifierWindow(Image<Gray, byte> grayImage, Image<Gray, byte> grayProccesedImage = null)
@@ -33,11 +31,11 @@ namespace ImageProcessingFramework.View
             InitializeComponent();
 
             var magnifierCommands = new MagnifierCommands();
-            //originalImageView.Model = magnifierCommands.PlotGrayImage(grayImage);
-            //if (grayProccesedImage != null)
-            //{
-            //    processedImageView.Model = magnifierCommands.PlotGrayImage(grayProccesedImage);
-            //}
+            originalImageView.Model = magnifierCommands.MagnifierGrayImage(grayImage);
+            if (grayProccesedImage != null)
+            {
+                processedImageView.Model = magnifierCommands.MagnifierGrayImage(grayProccesedImage);
+            }
         }
     }
 }

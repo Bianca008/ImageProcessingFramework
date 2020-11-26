@@ -22,8 +22,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="512"/>
-            <ColumnDefinition Width="512"/>
+            <ColumnDefinition Width="510"/>
+            <ColumnDefinition Width="510"/>
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="1"
