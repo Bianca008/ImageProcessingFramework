@@ -267,6 +267,7 @@ namespace ImageProcessingFramework.ViewModel
                 ProcessedImage = ImageConverter.Convert(m_grayProcessedImage);
                 OnPropertyChanged("ProcessedImage");
                 m_isPressedConvertButton = true;
+                m_isColorImage = false;
                 return;
             }
 

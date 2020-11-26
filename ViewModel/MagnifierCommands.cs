@@ -17,12 +17,12 @@ namespace ImageProcessingFramework.ViewModel
 
             plotImage.Axes.Add(new LinearColorAxis
             {
-                Palette = OxyPalettes.Hot(255)
+                Palette = OxyPalettes.Rainbow(255*255*255)    
             });
 
-            var dataGreen = GenerateColorPixel(colorImage, 0);
-            var dataRed = GenerateColorPixel(colorImage, 1);
-            var dataBlue = GenerateColorPixel(colorImage, 2);
+            var dataGreen = GenerateColorPixel(colorImage, 1);
+            var dataRed = GenerateColorPixel(colorImage, 2);
+            var dataBlue = GenerateColorPixel(colorImage, 0);
 
             var heatMapSeriesBlue = new HeatMapSeries
             {
@@ -34,6 +34,7 @@ namespace ImageProcessingFramework.ViewModel
                 YAxisKey = "yAxis",
                 RenderMethod = HeatMapRenderMethod.Rectangles,
                 LabelFontSize = 0.2,
+                Interpolate = true,
                 Data = dataBlue
             };
             var heatMapSeriesGreen = new HeatMapSeries
@@ -46,6 +47,7 @@ namespace ImageProcessingFramework.ViewModel
                 YAxisKey = "yAxis",
                 RenderMethod = HeatMapRenderMethod.Rectangles,
                 LabelFontSize = 0.2,
+                Interpolate = true,
                 Data = dataGreen
             };
             var heatMapSeriesRed = new HeatMapSeries
@@ -58,6 +60,7 @@ namespace ImageProcessingFramework.ViewModel
                 YAxisKey = "yAxis",
                 RenderMethod = HeatMapRenderMethod.Rectangles,
                 LabelFontSize = 0.2,
+                Interpolate = true,
                 Data = dataRed
             };
             plotImage.Series.Add(heatMapSeriesBlue);
@@ -137,14 +140,14 @@ namespace ImageProcessingFramework.ViewModel
         {
             var data = new double[9, 9];
             int i = 0;
-            for (int x = -4; x < 5; ++x)
+            for (int x = -4; x <= 4; ++x)
             {
                 int j = 0;
-                for (int y = -4; y < 5; ++y)
+                for (int y = 4; y >= -4; --y)
                 {
-                    data[j, i] = colorImage.Data[(int)DataProvider.MousePosition.Y + y,
+                    data[i, j] = colorImage.Data[(int)DataProvider.MousePosition.Y + y,
                         (int)DataProvider.MousePosition.X + x,
-                        channel];
+                        0];
                     ++j;
                 }
                 ++i;

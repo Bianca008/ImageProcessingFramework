@@ -138,9 +138,9 @@ namespace ImageProcessingFramework.ViewModel
                 Minimum = 0
             });
 
-            var seriesGreen = GenerateSeriesForColor(colorImage, 0, "Green");
-            var seriesRed = GenerateSeriesForColor(colorImage, 1, "Red");
-            var seriesBlue = GenerateSeriesForColor(colorImage, 2, "Blue");
+            var seriesGreen = GenerateSeriesForColor(colorImage, 1, "Green");
+            var seriesRed = GenerateSeriesForColor(colorImage, 2, "Red");
+            var seriesBlue = GenerateSeriesForColor(colorImage, 0, "Blue");
 
             plotImage.Series.Add(seriesGreen);
             plotImage.Series.Add(seriesRed);
